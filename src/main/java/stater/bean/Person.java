@@ -1,4 +1,4 @@
-package bean;
+package stater.bean;
 
 import org.springframework.stereotype.Component;
 

@@ -1,4 +1,4 @@
-package interceptor;
+package stater.interceptor;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;

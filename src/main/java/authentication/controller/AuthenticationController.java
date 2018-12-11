@@ -1,6 +1,7 @@
 package authentication.controller;
 
 import authentication.service.RegisterService;
+import entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class AuthenticationController {
+
     private final RegisterService registerService;
 
     @Autowired
@@ -32,7 +34,7 @@ public class AuthenticationController {
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     @ResponseBody
     public String register(String id, String userName, String password) {
-        if (registerService.register(id, userName, password)) {
+        if (registerService.register(id, userName, password, User.Role.student)) {
             return "ok";
         } else {
             return "failed";

@@ -1,6 +1,6 @@
 package stater;
 
-import bean.Person;
+import stater.bean.Person;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -18,7 +18,7 @@ import java.util.List;
 @Controller
 @EntityScan(basePackages = "entity")
 @SpringBootApplication(scanBasePackages =
-        {"bean", "interceptor", "authentication"})
+        {"stater.bean", "stater.interceptor", "authentication", "property"})
 public class ApplicationController implements WebMvcConfigurer {
 
 

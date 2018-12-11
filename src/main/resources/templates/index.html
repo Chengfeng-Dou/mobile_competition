@@ -14,13 +14,13 @@
             <h3 class="panel-title">访问model</h3>
         </div>
         <div class="panel-body">
-            <!--/*@thymesVar id="singlePerson" type="bean.Person"*/-->
+            <!--/*@thymesVar id="singlePerson" type="stater.bean.Person"*/-->
             <!--/*@thymesVar id="name" type="java.lang.String"*/-->
             <span th:text="${singlePerson.name}"></span>
         </div>
     </div>
 
-    <!--/*@thymesVar id="people" type="List<bean.Person>"*/-->
+    <!--/*@thymesVar id="people" type="List<stater.bean.Person>"*/-->
     <div th:if = "${not #lists.isEmpty(people)}">
         <div class="panel panel-primary">
             <div class="panel-heading">
