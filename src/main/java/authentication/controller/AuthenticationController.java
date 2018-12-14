@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import stater.ResponseMsg;
 
 @Controller
 public class AuthenticationController {
@@ -33,13 +34,43 @@ public class AuthenticationController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     @ResponseBody
-    public String register(String id, String userName, String password) {
+    public ResponseMsg register(String id, String userName, String password) {
+        ResponseMsg responseMsg = new ResponseMsg();
+        responseMsg.data = "";
         if (registerService.register(id, userName, password, User.Role.student)) {
-            return "ok";
+            responseMsg.state = 200;
+            responseMsg.description = "ok";
         } else {
-            return "failed";
+            responseMsg.state = 500;
+            responseMsg.description = "invalid user info";
         }
 
+        return responseMsg;
     }
 
+
+    @RequestMapping(value = "/loginFailed", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseMsg loginFailed(){
+        ResponseMsg responseMsg = new ResponseMsg();
+
+        responseMsg.state = 404;
+        responseMsg.description = "invalid username or password";
+        responseMsg.data = "";
+
+        return responseMsg;
+    }
+
+
+    @RequestMapping(value = "/loginSuccess", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseMsg loginSuccess(){
+        ResponseMsg responseMsg = new ResponseMsg();
+
+        responseMsg.state = 200;
+        responseMsg.description = "login success";
+        responseMsg.data = "";
+
+        return responseMsg;
+    }
 }

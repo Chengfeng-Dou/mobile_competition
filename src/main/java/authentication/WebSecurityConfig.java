@@ -36,14 +36,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .anyRequest().permitAll()
+                .antMatchers("/property/*").hasAnyAuthority("admin", "student", "teacher")
 
                 .and()
 
                 .formLogin()
                     .loginPage("/login")
-                    .failureUrl("/login?msg=error")
-                    .defaultSuccessUrl("/")
+                    .failureUrl("/loginFailed")
+                    .defaultSuccessUrl("/loginSuccess")
                     .permitAll()
                 .and()
 
