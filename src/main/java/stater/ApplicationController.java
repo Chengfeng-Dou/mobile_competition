@@ -18,7 +18,7 @@ import java.util.List;
 @Controller
 @EntityScan(basePackages = "entity")
 @SpringBootApplication(scanBasePackages =
-        {"stater.bean", "stater.interceptor", "authentication", "property"})
+        {"stater.bean", "stater.interceptor", "authentication", "property", "classroom"})
 public class ApplicationController implements WebMvcConfigurer {
 
 

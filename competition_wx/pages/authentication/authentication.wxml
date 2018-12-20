@@ -1,0 +1,28 @@
+<view class='container'>
+  <view class='col-12 y-extend show-border'>
+    <text class=' text-center row-6'>
+        假设这里有一个这么大的图片
+    </text>
+    <text class=' text-center row-6'>
+        假设这里有一个这么大的图片
+    </text>
+    <text class=' text-center row-6'>
+        假设这里有一个这么大的图片
+    </text>
+  </view>
+
+  <view class='y-extend'>
+    <view class="form-group col-9">
+      <input id='username' type='text' class="form-control" placeholder='用户名' bindinput='inputUsername'></input>
+    </view>
+
+    <view class="form-group col-9">
+      <input id='password' class="form-control" password="true" placeholder='密码' bindinput='inputPassword'></input>
+    </view>
+
+    <view class='form-group'>
+      <button class='btn-primary col-9' bindtap='login'>登陆</button>
+    </view>
+  </view>
+
+</view>

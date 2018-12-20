@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import stater.ResponseMsg;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Controller
 public class AuthenticationController {
 
@@ -64,12 +66,12 @@ public class AuthenticationController {
 
     @RequestMapping(value = "/loginSuccess", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseMsg loginSuccess(){
+    public ResponseMsg loginSuccess(HttpServletRequest request){
         ResponseMsg responseMsg = new ResponseMsg();
 
         responseMsg.state = 200;
         responseMsg.description = "login success";
-        responseMsg.data = "";
+        responseMsg.data = request.getSession().getId();
 
         return responseMsg;
     }
