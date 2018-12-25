@@ -12,7 +12,7 @@ import pku.edu.competition.common.ResponseMsg;
 import pku.edu.competition.utils.SecurityUserHelper;
 
 @Controller
-@RequestMapping("/pku/edu/competition/property")
+@RequestMapping("/property")
 public class PropertyController {
     private final PropertyService service;
 

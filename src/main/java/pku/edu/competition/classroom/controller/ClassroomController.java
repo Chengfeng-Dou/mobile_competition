@@ -11,7 +11,7 @@ import pku.edu.competition.common.ResponseMsg;
 import java.util.List;
 
 @Controller
-@RequestMapping("/pku/edu/competition/classroom")
+@RequestMapping("/classroom")
 public class ClassroomController {
     private final ClassroomRepository repository;
 

@@ -39,6 +39,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/property/*", "/rent/*")
                 .hasAnyAuthority("admin", "student", "teacher")
 
+                .antMatchers("/classroom/addClassroom")
+                .hasAuthority("admin")
+
                 .and()
 
                 .formLogin()
