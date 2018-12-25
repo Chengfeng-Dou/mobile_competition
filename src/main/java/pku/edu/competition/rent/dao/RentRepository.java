@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.sql.Timestamp;
 import java.util.List;
 
+
 public interface RentRepository extends JpaRepository<Rent, RentPk> {
 
     @Query("select r from Rent r where r.classRoomId = ?1 and r.startTime >= ?2 and r.endTime <= ?3")
@@ -15,4 +16,7 @@ public interface RentRepository extends JpaRepository<Rent, RentPk> {
 
     @Query("select r from Rent r where r.ownerId = ?1")
     List<Rent> getRentsByOwnerId(String ownerId);
+
+    @Query("select r from Rent r where r.classRoomId like ?1% and r.startTime between ?2 and ?3")
+    List<Rent> getRentsByBuildingNameAndDate(String buildingName, Timestamp startTime, Timestamp endTime);
 }

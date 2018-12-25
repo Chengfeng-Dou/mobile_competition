@@ -1,5 +1,6 @@
 package pku.edu.competition.rent.controller;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import pku.edu.competition.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,12 +25,14 @@ public class RentController {
 
     @RequestMapping("/rentRoom")
     @ResponseBody
-    public ResponseMsg rentClassroom(String roomId, Date startTime, Date endTime) {
+    public ResponseMsg rentClassroom(String roomId,
+                                     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date startTime,
+                                     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date endTime) {
         ResponseMsg msg = new ResponseMsg();
         User user = SecurityUserHelper.getCurrentPrincipal();
 
         RentResponse rentResponse = rentService.rentRoom(user.getId(), roomId, startTime, endTime);
-        msg.state = rentResponse == RentResponse.OK ? 200: 500;
+        msg.state = rentResponse == RentResponse.OK ? 200 : 500;
         msg.description = rentResponse.name();
 
         return msg;
@@ -37,7 +40,7 @@ public class RentController {
 
     @RequestMapping("/showRentStrips")
     @ResponseBody
-    public ResponseMsg getRentStrips(){
+    public ResponseMsg getRentStrips() {
         ResponseMsg responseMsg = new ResponseMsg();
         User user = SecurityUserHelper.getCurrentPrincipal();
 
@@ -45,4 +48,6 @@ public class RentController {
 
         return responseMsg;
     }
+
+
 }

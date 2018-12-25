@@ -1,16 +1,18 @@
 package pku.edu.competition.rent.service;
 
 
-import pku.edu.competition.entity.Rent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pku.edu.competition.entity.Rent;
 import pku.edu.competition.rent.dao.RentRepository;
 
+import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.concurrent.locks.ReentrantLock;
 
 @Service
 public class RentServiceImpl implements RentService {
@@ -19,7 +21,7 @@ public class RentServiceImpl implements RentService {
     private final Account account;
     private final RentRepository rentRepository;
 
-    private ReadWriteLock readWriteLock = new ReentrantReadWriteLock(true);
+    private Lock rentLock = new ReentrantLock();
 
     @Autowired
     public RentServiceImpl(DateChecker dateChecker, ClassRoomChecker roomChecker, Account account, RentRepository rentRepository) {
@@ -31,34 +33,57 @@ public class RentServiceImpl implements RentService {
 
     @Override
     public RentResponse rentRoom(String userId, String roomId, Date startTime, Date endTime) {
-        Lock writeLock = readWriteLock.writeLock();
-        writeLock.lock();
+        RentResponse temp = RentResponse.TIME_OUT;
+        try {
+            rentLock.tryLock(8000, TimeUnit.MILLISECONDS);
 
-        if(!dateChecker.isValidDate(startTime, endTime)){
-            writeLock.unlock();
-            return RentResponse.INVALID_DATE;
-        }
+            if (!dateChecker.isValidDate(startTime, endTime)) {
+                rentLock.unlock();
+                return RentResponse.INVALID_DATE;
+            }
 
-        RentResponse temp = roomChecker.checkClassRoom(roomId, startTime, endTime);
-        if(temp != RentResponse.OK){
-            writeLock.unlock();
-            return temp;
-        }
+            temp = roomChecker.checkClassRoom(roomId, startTime, endTime);
+            if (temp != RentResponse.OK) {
+                rentLock.unlock();
+                return temp;
+            }
 
 
-        temp = account.tryToPay(userId, roomId, startTime, endTime);
-        writeLock.unlock();
+            temp = account.tryToPay(userId, roomId, startTime, endTime);
+            rentLock.unlock();
+        } catch (InterruptedException ignored) {}
+
         return temp;
     }
 
     @Override
     public List<Rent> getRentStrips(String userId) {
-        Lock readLock = readWriteLock.readLock();
-        readLock.lock();
 
-        List<Rent> rents = rentRepository.getRentsByOwnerId(userId);
-
-        readLock.unlock();
-        return rents;
+        return rentRepository.getRentsByOwnerId(userId);
     }
+
+    @Override
+    public List<Rent> getRentStripsByBuildingNameAndDate(String buildingName, Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+
+        Timestamp startTime = new Timestamp(calendar.getTimeInMillis());
+        System.out.println(startTime.toString());
+
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+
+        Timestamp endTime = new Timestamp(calendar.getTimeInMillis());
+        System.out.println(endTime.toString());
+
+        return rentRepository.getRentsByBuildingNameAndDate(buildingName, startTime, endTime);
+    }
+
+
 }
+
